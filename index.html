@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>校史回响 · 河北师范大学校史智能讲解员</title>
+<meta name="description" content="基于河北师范大学官网公开校史资料构建的检索增强问答应用，答案逐句可溯源。">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="app">
+
+  <aside class="rail">
+    <div class="brand">
+      <div class="seal">响</div>
+      <div>
+        <h1 class="serif">校史回响</h1>
+        <p>河北师范大学 · 校史智能讲解员</p>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="on" data-tab="chat"><span class="dot"></span>对话</button>
+      <button data-tab="timeline"><span class="dot"></span>时间轴</button>
+      <button data-tab="kb"><span class="dot"></span>知识库</button>
+      <button data-tab="about"><span class="dot"></span>关于与设置</button>
+    </nav>
+
+    <div>
+      <div style="font-size:11px;color:var(--ink-3);letter-spacing:1.4px;margin-bottom:8px">回答方式</div>
+      <div class="mode">
+        <button class="on" data-mode="local">本地检索</button>
+        <button data-mode="ai">AI 增强</button>
+      </div>
+    </div>
+
+    <div class="meta">
+      <div><b>知识库</b> 26 段 · 3 个官方来源</div>
+      <div><b>资料时点</b> 2026 年 11 月</div>
+      <div><b>模式</b> <span id="modeText">离线检索增强</span></div>
+      <div style="margin-top:8px;opacity:.8">答案均标注出处，可点开原文核对</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <h2 id="viewTitle">对话 · 向校史提问</h2>
+      <div class="right">
+        <span class="badge"><i></i><span id="engineBadge">本地检索 · 无需联网</span></span>
+        <span>河北师范大学 2026 校园网络文化节 · 数智新技艺</span>
+      </div>
+    </div>
+
+    <div class="view" id="view">
+
+      <section class="pane on" id="pane-chat">
+        <div class="hero" id="hero">
+          <div class="kicker">1902 — 2026</div>
+          <h3 class="serif">一百二十余年，<br>让校史<em>开口说话</em>。</h3>
+          <p>「校史回响」把学校官网公开的校史资料整理成可检索的知识库。你问一个问题，它先找到原文，再作答——每一句结论后面都标着出处，点到即可核对。没有依据的，它不会编。</p>
+          <div class="chips" id="chips">
+            <button class="chip">学校最早的前身是哪一年创办的？</button>
+            <button class="chip">校训是什么，有什么含义？</button>
+            <button class="chip">抗战时期学校迁到了哪里？</button>
+            <button class="chip">河北师范大学是哪几所学校合并的？</button>
+            <button class="chip">邓颖超与师大有什么关系？</button>
+            <button class="chip">校徽为什么要用「线装书」？</button>
+          </div>
+        </div>
+        <div id="chat"></div>
+      </section>
+
+      <section class="pane" id="pane-timeline">
+        <div class="hero" style="padding-bottom:0">
+          <div class="kicker">TIMELINE</div>
+          <h3 class="serif" style="font-size:28px">从顺天府学堂到今天的师大</h3>
+          <p>沿革资料全部来自学校官网「历史沿革」页面。点任意节点，可以直接就该年份追问。</p>
+        </div>
+        <div class="tl" id="tl"></div>
+      </section>
+
+      <section class="pane" id="pane-kb">
+        <div class="hero" style="padding-bottom:0">
+          <div class="kicker">KNOWLEDGE BASE</div>
+          <h3 class="serif" style="font-size:28px">知识库 · 26 段可溯源原文</h3>
+          <p>每一段都是一条独立的事实单元，带编号、来源与原文链接。回答中的 [S1] 就指向这里。</p>
+        </div>
+        <table class="kb"><thead><tr><th style="width:52px">编号</th><th style="width:88px">年代</th><th style="width:200px">条目</th><th>原文摘录</th><th style="width:90px">来源</th></tr></thead><tbody id="kbBody"></tbody></table>
+      </section>
+
+      <section class="pane" id="pane-about">
+        <div class="hero" style="padding-bottom:0">
+          <div class="kicker">ABOUT</div>
+          <h3 class="serif" style="font-size:28px">它是什么，凭什么可信</h3>
+        </div>
+        <div class="note">
+          <h4>一、它怎么工作</h4>
+          <p>问题进来后先做中文分词（单字 + 二元词），用 BM25 在 26 段校史原文里排序，取最相关的 3 段；再从段落中挑出最能回答问题的句子，组成回答并挂上出处编号。<b>整个过程在浏览器本地完成，不联网、不上传、不调用任何外部接口</b>——断网也能用。</p>
+          <h4 style="margin-top:16px">二、为什么不会胡编</h4>
+          <p>本地模式的答案全部是原文句子的摘录与重组，不生成任何新事实。检索不到，它会直接说"知识库中没有收录"，并给出最接近的三条，而不是编一个看起来合理的答案。</p>
+          <h4 style="margin-top:16px">三、AI 增强模式</h4>
+          <p>可选：填入你自己的大模型 API Key（OpenAI 兼容接口，如 DeepSeek），应用会把检索到的原文作为上下文交给模型，要求它只依据资料作答并保留 [S1] 式引用。Key 只存在你本机浏览器里，不会发往除模型服务商以外的任何地方。</p>
+          <div class="field"><label>API Base（OpenAI 兼容）</label><input id="cfgBase" placeholder="https://api.deepseek.com/v1"></div>
+          <div class="field"><label>模型名</label><input id="cfgModel" placeholder="deepseek-chat"></div>
+          <div class="field"><label>API Key（仅保存在本机 localStorage）</label><input id="cfgKey" type="password" placeholder="sk-..."></div>
+          <button class="act" id="saveCfg">保存设置</button>
+          <button class="act ghost" id="clearCfg" style="margin-left:8px">清除</button>
+        </div>
+        <div class="note">
+          <h4>四、资料来源与声明</h4>
+          <ul>
+            <li>学校简介：<a href="https://www.hebtu.edu.cn/a/xxgk/xxjj/index.html" target="_blank" rel="noopener">www.hebtu.edu.cn/a/xxgk/xxjj/</a>（数据截至 2026 年 11 月）</li>
+            <li>历史沿革：<a href="https://www.hebtu.edu.cn/a/xxgk/lsyg/index.html" target="_blank" rel="noopener">www.hebtu.edu.cn/a/xxgk/lsyg/</a></li>
+            <li>学校标识：<a href="https://www.hebtu.edu.cn/a/xxgk/xxbz/index.html" target="_blank" rel="noopener">www.hebtu.edu.cn/a/xxgk/xxbz/</a></li>
+          </ul>
+          <p style="margin-top:8px">本应用为非商业性的校园文化作品，仅摘录公开资料用于校史普及；如涉内容更新，以学校官网为准。</p>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="dock">
+      <div class="composer">
+        <textarea id="input" rows="1" placeholder="问点什么，例如：学校是哪一年创办的？"></textarea>
+        <button id="send">提问</button>
+      </div>
+      <div class="hint"><span>Enter 发送 · Shift + Enter 换行</span><span id="stat"></span></div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/corpus.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
