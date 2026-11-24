@@ -46,7 +46,7 @@
     <div class="top">
       <h2 id="viewTitle">对话 · 向校史提问</h2>
       <div class="right">
-        <span class="badge"><i></i><span id="engineBadge">本地检索 · 无需联网</span></span>
+        <span class="badge"><i></i><span id="engineBadge">AI 智能体 · 本地推理 · 可接入大模型</span></span>
         <span>河北师范大学 2026 校园网络文化节 · 数智新技艺</span>
       </div>
     </div>
@@ -92,6 +92,11 @@
         <div class="hero" style="padding-bottom:0">
           <div class="kicker">ABOUT</div>
           <h3 class="serif" style="font-size:28px">它是什么，凭什么可信</h3>
+        </div>
+        <div class="note" style="border-color:#dcc9a8;background:#fffdf6">
+          <h4>先回答一个可能被问到的问题：它为什么是“智能体”</h4>
+          <p>因为它跑的是完整的一条链：<b>理解问题 → 检索证据 → 挑出最相关的那一句 → 组织回答 → 标注出处 → 判断该不该回答</b>。分词与 BM25 负责召回，句子级打分负责摘取，门槛机制负责拒答——最后一步“知道什么时候不说”，是普通搜索框不会做的。</p>
+          <p style="margin-top:8px">默认跑在本地（不联网、不上传、断网可用）；切到「AI 增强」后，检索到的原文会作为上下文交给大模型，由它组织语言，但必须保留 <b>[S1]</b> 式引用。生成能力与可核查性，两者都不放弃。</p>
         </div>
         <div class="note">
           <h4>一、它怎么工作</h4>
