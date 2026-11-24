@@ -344,7 +344,7 @@
       b.classList.add('on');
       mode = b.dataset.mode;
       document.getElementById('modeText').textContent = mode === 'ai' ? 'AI 增强（需 Key）' : '离线检索增强';
-      document.getElementById('engineBadge').textContent = mode === 'ai' ? 'AI 增强 · 需本地 Key' : '本地检索 · 无需联网';
+      document.getElementById('engineBadge').textContent = mode === 'ai' ? 'AI 增强 · 大模型生成 · 保留引用' : 'AI 智能体 · 本地推理 · 可接入大模型';
     });
   });
 
